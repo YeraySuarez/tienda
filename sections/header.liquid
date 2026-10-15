@@ -102,7 +102,7 @@
 
       {%- comment -%} Derecha: iconos {%- endcomment -%}
       <div class="header__right">
-        {%- if shop.customer_accounts_enabled -%}
+        {%- if shop.customer_accounts_enabled and section.settings.show_account -%}
           <a href="{{ routes.account_url }}" class="header__icon" aria-label="{{ 'customer.account.title' | t }}">
             {%- render 'icon', icon: 'account' -%}
           </a>
@@ -130,7 +130,7 @@
 
         {%- if settings.show_wishlist -%}
           <a href="{{ routes.root_url | append: '/pages/' | append: section.settings.wishlist_page_handle | replace: '//', '/' }}" class="header__icon" aria-label="{{ 'products.product.wishlist' | t }}">
-            {%- render 'icon', icon: 'heart' -%}
+            {%- render 'icon', icon: 'bookmark' -%}
             <span class="header__count" data-wishlist-count data-count="0">0</span>
           </a>
         {%- endif -%}
@@ -366,6 +366,12 @@
     {
       "type": "header",
       "content": "Iconos"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Mostrar icono de cuenta",
+      "default": false
     },
     {
       "type": "checkbox",

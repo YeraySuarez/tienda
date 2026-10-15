@@ -109,26 +109,20 @@
       {%- endif -%}
     </div>
 
-    {%- if settings.show_wishlist and product.handle != blank -%}
-      <button type="button" class="product-card__wishlist" data-wishlist-toggle="{{ product.handle }}" aria-pressed="false" aria-label="{{ 'products.product.wishlist' | t }}">
-        {%- render 'icon', icon: 'heart' -%}
-      </button>
-    {%- endif -%}
-
     {%- if show_quick_add and product.available and is_placeholder != true -%}
-      <div class="product-card__quick-add">
+      {%- capture quick_label -%}
+        {%- if is_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif -%}
+      {%- endcapture -%}
+      <div class="product-card__quick-add" data-quick-add>
         {%- if product.has_only_default_variant -%}
           {%- form 'product', product, data-product-form: '', data-quick-add: '' -%}
             <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-            <button type="submit" class="btn btn--small">
-              {%- if is_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif -%}
-            </button>
+            <button type="submit" class="quick-add__button">{{ quick_label }}</button>
           {%- endform -%}
         {%- elsif size_option and product.options.size == 1 -%}
-          <div class="quick-add__sizes">
-            <span class="quick-add__sizes-label">
-              {%- if is_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif -%}
-            </span>
+          <button type="button" class="quick-add__button" data-quick-add-open aria-expanded="false">{{ quick_label }}</button>
+          <div class="quick-add__sizes" hidden>
+            <span class="quick-add__sizes-label">{{ 'products.product.select_size' | t }}</span>
             {%- for variant in product.variants -%}
               <button
                 type="button"
@@ -141,16 +135,23 @@
             {%- endfor -%}
           </div>
         {%- else -%}
-          <a href="{{ product.url }}" class="btn btn--small">{{ 'products.product.choose_options' | t }}</a>
+          <a href="{{ product.url }}" class="quick-add__button">{{ 'products.product.choose_options' | t }}</a>
         {%- endif -%}
       </div>
     {%- endif -%}
   </div>
 
   <div class="product-card__info body-medium">
-    <a href="{{ product.url | default: '#' }}" class="product-card__title">
-      {{- product.title | default: 'Producto de ejemplo' | escape -}}
-    </a>
+    <div class="product-card__title-row">
+      <a href="{{ product.url | default: '#' }}" class="product-card__title">
+        {{- product.title | default: 'Producto de ejemplo' | escape -}}
+      </a>
+      {%- if settings.show_wishlist and product.handle != blank -%}
+        <button type="button" class="product-card__wishlist" data-wishlist-toggle="{{ product.handle }}" aria-pressed="false" aria-label="{{ 'products.product.wishlist' | t }}">
+          {%- render 'icon', icon: 'bookmark' -%}
+        </button>
+      {%- endif -%}
+    </div>
 
     {%- if is_placeholder -%}
       <span class="price"><span>{{ 4990 | money }}</span></span>

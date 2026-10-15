@@ -5,20 +5,67 @@
       "blocks": {
         "title": { "type": "title", "settings": {} },
         "price": { "type": "price", "settings": {} },
-        "variant_picker": { "type": "variant_picker", "settings": { "color_swatches": true } },
-        "inventory": { "type": "inventory", "settings": { "low_threshold": 5 } },
-        "buy_buttons": { "type": "buy_buttons", "settings": { "show_quantity": false, "show_dynamic_checkout": false } },
-        "description": { "type": "collapsible", "settings": { "heading": "Descripción", "use_description": true, "open": true } },
-        "shipping": { "type": "collapsible", "settings": { "heading": "Envíos y devoluciones", "content": "<p>Envío gratuito a Portugal y España (península) en pedidos superiores a 250 €.</p>" } },
-        "share": { "type": "share", "settings": {} }
+        "siblings": { "type": "siblings", "settings": { "label": "Colores" } },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": { "picker_style": "dropdown", "require_selection": true, "color_swatches": true }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": { "show_quantity": false, "show_price": true, "show_dynamic_checkout": false }
+        },
+        "shipping_box": {
+          "type": "shipping_box",
+          "settings": {
+            "title": "Enviamos a [pais]",
+            "show_flag": true,
+            "text": "Devoluciones en 14 días a través de nuestro portal online"
+          }
+        },
+        "description": {
+          "type": "collapsible",
+          "settings": { "heading": "Descripción", "use_description": true, "open": true }
+        },
+        "shipping": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Envío y entrega",
+            "content": "<p>Envío gratuito a Portugal y España (península) en pedidos superiores a 250 €.</p>"
+          }
+        },
+        "returns": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Devoluciones",
+            "content": "<p>Tienes 14 días para devolver tu pedido a través de nuestro portal online.</p>"
+          }
+        }
       },
-      "block_order": ["title", "price", "variant_picker", "inventory", "buy_buttons", "description", "shipping", "share"],
+      "block_order": ["title", "price", "siblings", "variant_picker", "buy_buttons", "shipping_box", "description", "shipping", "returns"],
       "settings": {}
+    },
+    "press": {
+      "type": "press-logos",
+      "blocks": {
+        "logo_1": { "type": "logo", "settings": { "name": "Medio 1", "quote": "<p>\"Una de las marcas de referencia de las que todo el mundo habla.\"</p>" } },
+        "logo_2": { "type": "logo", "settings": { "name": "Medio 2", "quote": "<p>\"Una marca que marca tendencia.\"</p>" } },
+        "logo_3": { "type": "logo", "settings": { "name": "Medio 3", "quote": "<p>\"Una firma emergente que lucen caras conocidas.\"</p>" } },
+        "logo_4": { "type": "logo", "settings": { "name": "Medio 4", "quote": "<p>\"Una de las colecciones de vestidos más encantadoras de la temporada.\"</p>" } },
+        "logo_5": { "type": "logo", "settings": { "name": "Medio 5", "quote": "<p>\"Prendas listas para pasar del trabajo al after-work.\"</p>" } }
+      },
+      "block_order": ["logo_1", "logo_2", "logo_3", "logo_4", "logo_5"],
+      "settings": { "title": "VISTO EN", "padding_top": 60, "padding_bottom": 40 }
     },
     "related": {
       "type": "related-products",
-      "settings": { "title": "También te puede gustar" }
+      "settings": {
+        "title": "También te puede gustar:",
+        "show_recently_viewed": true,
+        "recent_title": "Vistos recientemente",
+        "columns": 3.5,
+        "full_width": true
+      }
     }
   },
-  "order": ["main", "related"]
+  "order": ["main", "press", "related"]
 }

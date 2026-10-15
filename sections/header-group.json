@@ -16,7 +16,7 @@
         "announcement_1"
       ],
       "settings": {
-        "mode": "ticker",
+        "mode": "slider",
         "ticker_direction": "rtl",
         "ticker_speed": 40,
         "color_bg": "#212121",
@@ -35,7 +35,8 @@
         "transparent_text": "#ffffff",
         "padding": 15,
         "show_country_selector": true,
-        "wishlist_page_handle": "wishlist"
+        "wishlist_page_handle": "wishlist",
+        "show_account": false
       }
     }
   },

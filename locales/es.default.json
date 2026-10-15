@@ -221,7 +221,11 @@
       "wishlist": "Lista de deseos",
       "wishlist_added": "Guardado en la lista de deseos",
       "wishlist_empty": "Tu lista de deseos está vacía.",
-      "wishlist_removed": "Eliminado de la lista de deseos"
+      "wishlist_removed": "Eliminado de la lista de deseos",
+      "select_option": "Selecciona tu {{ option }}",
+      "select_size": "Selecciona tu talla",
+      "select_size_error": "Por favor, selecciona una talla.",
+      "recently_viewed": "Vistos recientemente"
     }
   },
   "sections": {

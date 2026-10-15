@@ -8,6 +8,14 @@
     <h2 class="logos__title subheading">{{ section.settings.title | escape }}</h2>
   {%- endif -%}
 
+  <div class="logos__quotes body-medium" aria-live="polite">
+    {%- for block in section.blocks -%}
+      <div class="logos__quote{% if forloop.first %} is-active{% endif %}">
+        {{- block.settings.quote -}}
+      </div>
+    {%- endfor -%}
+  </div>
+
   <div class="logos__list">
     {%- for block in section.blocks -%}
       <button type="button" class="logos__item{% if forloop.first %} is-active{% endif %}" aria-label="{{ block.settings.name | default: forloop.index | escape }}" {{ block.shopify_attributes }}>
@@ -24,13 +32,6 @@
     {%- endfor -%}
   </div>
 
-  <div class="logos__quotes body-medium" aria-live="polite">
-    {%- for block in section.blocks -%}
-      <div class="logos__quote{% if forloop.first %} is-active{% endif %}">
-        {{- block.settings.quote -}}
-      </div>
-    {%- endfor -%}
-  </div>
 </div>
 
 {% schema %}

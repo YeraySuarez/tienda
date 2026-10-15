@@ -22,7 +22,9 @@
       "product_card_ratio": "0.8333",
       "cart_type": "drawer",
       "free_shipping_threshold": 250,
-      "body_use_system_font": true
+      "body_use_system_font": true,
+      "color_nav_highlight": "#e0823d",
+      "grid_gap": 6
     }
   }
 }

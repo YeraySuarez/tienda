@@ -77,7 +77,38 @@
               <p class="product__vendor subheading" {{ block.shopify_attributes }}>{{ product.vendor | escape }}</p>
 
             {%- when 'title' -%}
-              <h1 class="product__title" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+              <div class="product__title-row" {{ block.shopify_attributes }}>
+                <h1 class="product__title">{{ product.title | escape }}</h1>
+                {%- if settings.show_wishlist -%}
+                  <button type="button" class="product__wishlist" data-wishlist-toggle="{{ product.handle }}" aria-pressed="false" aria-label="{{ 'products.product.wishlist' | t }}">
+                    {%- render 'icon', icon: 'bookmark' -%}
+                  </button>
+                {%- endif -%}
+              </div>
+
+            {%- when 'siblings' -%}
+              {%- assign siblings = product.metafields.custom.siblings.value -%}
+              {%- if siblings != blank -%}
+                <div class="product__siblings" {{ block.shopify_attributes }}>
+                  <p class="product__siblings-label">{{ product.metafields.custom.color_name | default: block.settings.label }}</p>
+                  <div class="product__siblings-list">
+                    {%- assign current_in_list = false -%}
+                    {%- for sibling in siblings -%}
+                      {%- if sibling.id == product.id %}{% assign current_in_list = true %}{% endif -%}
+                    {%- endfor -%}
+                    {%- unless current_in_list -%}
+                      <span class="product__sibling is-active" title="{{ product.title | escape }}">
+                        {{ product.featured_media | image_url: width: 120 | image_tag: loading: 'lazy', alt: product.title }}
+                      </span>
+                    {%- endunless -%}
+                    {%- for sibling in siblings -%}
+                      <a href="{{ sibling.url }}" class="product__sibling{% if sibling.id == product.id %} is-active{% endif %}" title="{{ sibling.title | escape }}">
+                        {{ sibling.featured_media | image_url: width: 120 | image_tag: loading: 'lazy', alt: sibling.title }}
+                      </a>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
 
             {%- when 'price' -%}
               <div class="product__price" {{ block.shopify_attributes }}>
@@ -105,39 +136,66 @@
                           assign is_color = true
                         endif
                       endfor
+                      assign use_dropdown = false
+                      if block.settings.picker_style == 'dropdown' and is_color == false
+                        assign use_dropdown = true
+                      endif
+                      assign needs_choice = false
+                      if use_dropdown and block.settings.require_selection and option.values.size > 1
+                        assign needs_choice = true
+                        assign must_choose = true
+                      endif
                     -%}
-                    <fieldset>
-                      <legend>{{ option.name | escape }}: <span data-option-value="{{ forloop.index0 }}">{{ option.selected_value | escape }}</span></legend>
-                      <div class="variant-picker__values">
-                        {%- for value in option.values -%}
-                          {%- assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0 -%}
-                          <input
-                            type="radio"
-                            id="{{ input_id }}"
-                            name="{{ option.name | escape }}"
-                            value="{{ value | escape }}"
-                            {% if option.selected_value == value %}checked{% endif %}
-                            {% unless value.available %}class="is-unavailable"{% endunless %}
-                          >
-                          {%- if is_color and block.settings.color_swatches -%}
-                            {%- liquid
-                              assign swatch_bg = value | handle | replace: '-', ''
-                              if value.swatch.color
-                                assign swatch_bg = value.swatch.color
-                              endif
-                            -%}
-                            <label
-                              for="{{ input_id }}"
-                              class="swatch-label"
-                              title="{{ value | escape }}"
-                              style="--swatch: {{ swatch_bg }};{% if value.swatch.image %} --swatch: url('{{ value.swatch.image | image_url: width: 80 }}');{% endif %}"
-                            >{{ value | escape }}</label>
-                          {%- else -%}
-                            <label for="{{ input_id }}">{{ value | escape }}</label>
+                    {%- if use_dropdown -%}
+                      {%- assign select_id = section.id | append: '-select-' | append: option.position -%}
+                      <div class="variant-picker__dropdown" data-option-index="{{ forloop.index0 }}">
+                        <label for="{{ select_id }}">{{ option.name | escape }}:</label>
+                        <select id="{{ select_id }}" name="{{ option.name | escape }}" data-option-select>
+                          {%- if needs_choice -%}
+                            {%- assign option_lower = option.name | downcase -%}
+                            <option value="" selected disabled>{{ 'products.product.select_option' | t: option: option_lower }}</option>
                           {%- endif -%}
-                        {%- endfor -%}
+                          {%- for value in option.values -%}
+                            <option value="{{ value | escape }}"{% if needs_choice == false and option.selected_value == value %} selected{% endif %}>
+                              {{- value | escape -}}{%- unless value.available %} — {{ 'products.product.sold_out' | t }}{% endunless -%}
+                            </option>
+                          {%- endfor -%}
+                        </select>
                       </div>
-                    </fieldset>
+                    {%- else -%}
+                      <fieldset data-option-index="{{ forloop.index0 }}">
+                        <legend>{{ option.name | escape }}: <span data-option-value="{{ forloop.index0 }}">{{ option.selected_value | escape }}</span></legend>
+                        <div class="variant-picker__values">
+                          {%- for value in option.values -%}
+                            {%- assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0 -%}
+                            <input
+                              type="radio"
+                              id="{{ input_id }}"
+                              name="{{ option.name | escape }}"
+                              value="{{ value | escape }}"
+                              {% if option.selected_value == value %}checked{% endif %}
+                              {% unless value.available %}class="is-unavailable"{% endunless %}
+                            >
+                            {%- if is_color and block.settings.color_swatches -%}
+                              {%- liquid
+                                assign swatch_bg = value | handle | replace: '-', ''
+                                if value.swatch.color
+                                  assign swatch_bg = value.swatch.color
+                                endif
+                              -%}
+                              <label
+                                for="{{ input_id }}"
+                                class="swatch-label"
+                                title="{{ value | escape }}"
+                                style="--swatch: {{ swatch_bg }};{% if value.swatch.image %} --swatch: url('{{ value.swatch.image | image_url: width: 80 }}');{% endif %}"
+                              >{{ value | escape }}</label>
+                            {%- else -%}
+                              <label for="{{ input_id }}">{{ value | escape }}</label>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </div>
+                      </fieldset>
+                    {%- endif -%}
                   {%- endfor -%}
                 </div>
               {%- endunless -%}
@@ -173,7 +231,7 @@
             {%- when 'buy_buttons' -%}
               <div {{ block.shopify_attributes }}>
                 {%- form 'product', product, data-product-form: '', class: 'product__form' -%}
-                  <input type="hidden" name="id" value="{{ current_variant.id }}">
+                  <input type="hidden" name="id" value="{% unless must_choose %}{{ current_variant.id }}{% endunless %}">
                   <div class="product__buttons">
                     {%- if block.settings.show_quantity -%}
                       <div class="quantity" style="align-self: flex-start;">
@@ -182,15 +240,16 @@
                         <button type="button" data-qty-step="1" aria-label="{{ 'cart.general.increase' | t }}">+</button>
                       </div>
                     {%- endif -%}
-                    <button type="submit" name="add" class="btn btn--full"{% unless current_variant.available %} disabled{% endunless %}>
+                    <button type="submit" name="add" class="btn btn--full"{% unless current_variant.available or must_choose %} disabled{% endunless %} data-price-in-button="{{ block.settings.show_price }}">
                       <span>
-                        {%- if current_variant.available == false -%}
+                        {%- if current_variant.available == false and must_choose != true -%}
                           {{ 'products.product.sold_out' | t }}
                         {%- elsif is_preorder -%}
                           {{ 'products.product.preorder' | t }}
                         {%- else -%}
                           {{ 'products.product.add_to_cart' | t }}
                         {%- endif -%}
+                        {%- if block.settings.show_price %} • {{ current_variant.price | money }}{% endif -%}
                       </span>
                     </button>
                     {%- if block.settings.show_dynamic_checkout -%}
@@ -199,6 +258,22 @@
                   </div>
                   <p class="product__error" data-product-error role="alert"></p>
                 {%- endform -%}
+              </div>
+
+            {%- when 'shipping_box' -%}
+              <div class="product__shipping-box" {{ block.shopify_attributes }}>
+                <p class="product__shipping-box-title">
+                  {%- if block.settings.show_flag -%}
+                    {{ localization.country | image_url: width: 32 | image_tag: class: 'product__flag', alt: localization.country.name }}
+                  {%- endif -%}
+                  {{ block.settings.title | replace: '[pais]', localization.country.name | upcase }}
+                </p>
+                {%- if block.settings.text != blank -%}
+                  <p class="product__shipping-box-text">
+                    {%- render 'icon', icon: 'return' -%}
+                    {{ block.settings.text }}
+                  </p>
+                {%- endif -%}
               </div>
 
             {%- when 'description' -%}
@@ -221,7 +296,7 @@
               -%}
               {%- if content != blank -%}
                 <details class="product__accordion" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
-                  <summary>{{ block.settings.heading | escape }} {% render 'icon', icon: 'chevron-down' %}</summary>
+                  <summary>{{ block.settings.heading | escape }} {% render 'icon', icon: 'plus' %}</summary>
                   <div class="product__accordion-content rte">{{ content }}</div>
                 </details>
               {%- endif -%}
@@ -239,12 +314,6 @@
           {%- endcase -%}
         {%- endfor -%}
 
-        {%- if settings.show_wishlist -%}
-          <button type="button" class="btn btn--outline btn--full" data-wishlist-toggle="{{ product.handle }}">
-            {%- render 'icon', icon: 'heart' -%}
-            {{ 'products.product.wishlist' | t }}
-          </button>
-        {%- endif -%}
       </div>
     </div>
   </div>
@@ -287,6 +356,22 @@
       "limit": 1,
       "settings": [
         {
+          "type": "select",
+          "id": "picker_style",
+          "label": "Estilo para talla y otras opciones",
+          "options": [
+            { "value": "dropdown", "label": "Desplegable" },
+            { "value": "buttons", "label": "Botones" }
+          ],
+          "default": "dropdown"
+        },
+        {
+          "type": "checkbox",
+          "id": "require_selection",
+          "label": "Obligar a elegir talla (\"Selecciona tu talla\")",
+          "default": true
+        },
+        {
           "type": "checkbox",
           "id": "color_swatches",
           "label": "Mostrar colores como círculos",
@@ -323,9 +408,58 @@
         },
         {
           "type": "checkbox",
+          "id": "show_price",
+          "label": "Mostrar el precio en el botón",
+          "default": true
+        },
+        {
+          "type": "checkbox",
           "id": "show_dynamic_checkout",
           "label": "Mostrar botones de pago dinámico",
           "default": false
+        }
+      ]
+    },
+    {
+      "type": "siblings",
+      "name": "Otros colores",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Muestra los productos del metacampo custom.siblings (lista de productos). El texto sale del metacampo custom.color_name."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texto si no hay custom.color_name",
+          "default": "Colores"
+        }
+      ]
+    },
+    {
+      "type": "shipping_box",
+      "name": "Caja de envío",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "info": "[pais] se sustituye por el país del cliente.",
+          "default": "Enviamos a [pais]"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_flag",
+          "label": "Mostrar bandera",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Devoluciones en 14 días a través de nuestro portal online"
         }
       ]
     },

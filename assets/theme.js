@@ -567,6 +567,13 @@
     var button = qs('[type="submit"]', form);
     var errorBox = qs('[data-product-error]', form.closest('[data-product]') || form);
     if (errorBox) errorBox.textContent = '';
+    var idField = qs('input[name="id"]', form);
+    if (idField && !idField.value) {
+      var emptySelect = qs('[data-option-select]', form.closest('[data-product]') || document);
+      if (errorBox) errorBox.textContent = strings.selectSize || '';
+      if (emptySelect) emptySelect.focus();
+      return;
+    }
     addToCart(new FormData(form), button).catch(function (err) {
       if (errorBox) errorBox.textContent = err.message;
     });
@@ -574,6 +581,17 @@
 
   // Quick add de talla en las tarjetas
   document.addEventListener('click', function (e) {
+    var opener = e.target.closest('[data-quick-add-open]');
+    if (opener) {
+      e.preventDefault();
+      var box = opener.closest('[data-quick-add]');
+      var sizes = qs('.quick-add__sizes', box);
+      opener.hidden = true;
+      sizes.hidden = false;
+      box.classList.add('is-open');
+      return;
+    }
+
     var size = e.target.closest('[data-quick-add-variant]');
     if (size) {
       e.preventDefault();
@@ -619,6 +637,19 @@
     openDrawer(drawer);
   });
 
+  // Cerrar el selector de tallas al salir de la tarjeta
+  document.addEventListener('mouseout', function (e) {
+    var card = e.target.closest && e.target.closest('.product-card');
+    if (!card || (e.relatedTarget && card.contains(e.relatedTarget))) return;
+    var box = qs('[data-quick-add].is-open', card);
+    if (!box) return;
+    box.classList.remove('is-open');
+    var opener = qs('[data-quick-add-open]', box);
+    if (opener) opener.hidden = false;
+    var sizes = qs('.quick-add__sizes', box);
+    if (sizes) sizes.hidden = true;
+  });
+
   /* ------------------------------------------------------------------------
      Página de producto: selector de variantes
      ------------------------------------------------------------------------ */
@@ -658,8 +689,10 @@
       var mediaList = qs('.product__media-list', product);
 
       function selectedOptions() {
-        return qsa('fieldset', picker).map(function (fs) {
-          var checked = qs('input:checked', fs);
+        return qsa('[data-option-index]', picker).map(function (el) {
+          var select = qs('select', el);
+          if (select) return select.value || null;
+          var checked = qs('input:checked', el);
           return checked ? checked.value : null;
         });
       }
@@ -671,7 +704,7 @@
       }
 
       function updateAvailability(options) {
-        qsa('fieldset', picker).forEach(function (fs, index) {
+        qsa('[data-option-index]', picker).forEach(function (fs, index) {
           qsa('input', fs).forEach(function (input) {
             var test = options.slice();
             test[index] = input.value;
@@ -693,13 +726,17 @@
           el.textContent = options[i] || '';
         });
 
+        var incomplete = options.some(function (o) { return o === null; });
         if (!variant) {
-          if (button) button.disabled = true;
-          if (buttonText) buttonText.textContent = strings.unavailable;
+          if (idInput) idInput.value = '';
+          if (button) button.disabled = !incomplete;
+          if (buttonText && !incomplete) buttonText.textContent = strings.unavailable;
           return;
         }
 
         if (idInput) idInput.value = variant.id;
+        var errorBox = qs('[data-product-error]', product);
+        if (errorBox) errorBox.textContent = '';
 
         if (priceEl) {
           var html = '';
@@ -716,7 +753,9 @@
           var preorder = product.getAttribute('data-preorder') === 'true';
           button.disabled = !variant.available;
           if (buttonText) {
-            buttonText.textContent = !variant.available ? strings.soldOut : (preorder ? strings.preorder : strings.addToCart);
+            var label = !variant.available ? strings.soldOut : (preorder ? strings.preorder : strings.addToCart);
+            if (button.getAttribute('data-price-in-button') === 'true') label += ' • ' + formatMoney(variant.price);
+            buttonText.textContent = label;
           }
         }
 
@@ -842,6 +881,63 @@
   });
 
   /* ------------------------------------------------------------------------
+     Productos relacionados + vistos recientemente
+     ------------------------------------------------------------------------ */
+
+  var RECENT_KEY = 'theme:recently-viewed';
+
+  function fetchCards(handles) {
+    return Promise.all(handles.map(function (handle) {
+      return fetch(routes.root + 'products/' + handle + '?view=card')
+        .then(function (r) { return r.ok ? r.text() : ''; })
+        .catch(function () { return ''; });
+    })).then(function (cards) { return cards.join(''); });
+  }
+
+  function initRelated(root) {
+    qsa('[data-related]', root).forEach(function (el) {
+      if (el._related) return;
+      el._related = true;
+      var track = qs('[data-recommendations]', el);
+      if (track && !track.children.length) {
+        fetch(el.getAttribute('data-recommendations-url'))
+          .then(function (r) { return r.text(); })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var fresh = qs('[data-recommendations]', doc);
+            if (fresh && fresh.innerHTML.trim()) {
+              track.innerHTML = fresh.innerHTML;
+              syncWishlistButtonsOnly();
+              initAnimations(el);
+            }
+          })
+          .catch(function () {});
+      }
+
+      var handle = el.getAttribute('data-product-handle');
+      var limit = parseInt(el.getAttribute('data-limit'), 10) || 8;
+      var list = [];
+      try { list = JSON.parse(localStorage.getItem(RECENT_KEY)) || []; } catch (e) {}
+      var others = list.filter(function (h) { return h !== handle; }).slice(0, limit);
+      if (handle) {
+        try { localStorage.setItem(RECENT_KEY, JSON.stringify([handle].concat(others).slice(0, 12))); } catch (e) {}
+      }
+
+      var recentTrack = qs('[data-recently-viewed]', el);
+      var recentTab = qs('[data-recent-tab]', el);
+      if (recentTrack && others.length) {
+        fetchCards(others).then(function (html) {
+          if (!html.trim()) return;
+          recentTrack.innerHTML = html;
+          if (recentTab) recentTab.hidden = false;
+          syncWishlistButtonsOnly();
+          qsa('.animate-on-scroll', recentTrack).forEach(function (c) { c.classList.add('is-visible'); });
+        });
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------------
      Animaciones al hacer scroll
      ------------------------------------------------------------------------ */
 
@@ -873,6 +969,7 @@
     initLogos(root);
     initCollectionCarousel(root);
     initProduct(root);
+    initRelated(root);
     initAnimations(root);
   }
 

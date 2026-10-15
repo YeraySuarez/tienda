@@ -221,7 +221,11 @@
       "wishlist": "Wishlist",
       "wishlist_added": "Saved to wishlist",
       "wishlist_empty": "Your wishlist is empty.",
-      "wishlist_removed": "Removed from wishlist"
+      "wishlist_removed": "Removed from wishlist",
+      "select_option": "Select your {{ option }}",
+      "select_size": "Select your size",
+      "select_size_error": "Please select a size.",
+      "recently_viewed": "Recently viewed"
     }
   },
   "sections": {

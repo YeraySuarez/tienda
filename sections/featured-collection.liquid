@@ -9,7 +9,7 @@
 
 <section
   class="featured-collection section-padding"
-  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px; --COLUMNS: {{ section.settings.columns }}; --COLUMNS-MEDIUM: {{ section.settings.columns_medium }}; --COLUMNS-MOBILE-GRID: {{ section.settings.columns_mobile }}; --visible-mobile: {{ section.settings.visible_mobile }};"
+  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px; --COLUMNS: {{ section.settings.columns }}; --COLUMNS-GRID: {{ section.settings.columns | round }}; --COLUMNS-MEDIUM: {{ section.settings.columns_medium }}; --COLUMNS-MOBILE-GRID: {{ section.settings.columns_mobile }}; --visible-mobile: {{ section.settings.visible_mobile }};"
 >
   {%- if section.settings.title != blank or section.settings.show_view_all -%}
     <div class="grid__heading-holder{% if section.settings.heading_align == 'row' %} grid__heading-holder--row{% endif %}">
@@ -30,7 +30,7 @@
   {%- endif -%}
 
   {%- if is_slider -%}
-    <div class="product-slider" data-product-slider>
+    <div class="product-slider{% if section.settings.full_width %} product-slider--full{% endif %}" data-product-slider>
       <div class="product-slider__track">
         {%- if collection != blank and collection.products_count > 0 -%}
           {%- for product in collection.products limit: limit -%}
@@ -133,11 +133,18 @@
     {
       "type": "range",
       "id": "columns",
-      "label": "Columnas (escritorio)",
+      "label": "Productos visibles (escritorio)",
+      "info": "Admite medios (3,5) para que se vea parte del siguiente producto en el carrusel.",
       "min": 2,
       "max": 6,
-      "step": 1,
-      "default": 5
+      "step": 0.5,
+      "default": 3.5
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Carrusel a todo el ancho",
+      "default": true
     },
     {
       "type": "range",
