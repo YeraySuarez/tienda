@@ -1,0 +1,285 @@
+{
+  "sections": {
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "title": "NUEVA COLECCIÓN",
+            "title_size": "heading-small",
+            "text": "<p>Disponible ahora</p>",
+            "button_label": "SHOP",
+            "link": "shopify://collections/all",
+            "button_style": "btn--white",
+            "text_position": "middle-center",
+            "text_color": "#ffffff",
+            "overlay_style": "radial",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "title": "EVENT DRESSES",
+            "title_size": "heading-small",
+            "text": "<p>Disponible ahora</p>",
+            "button_label": "SHOP",
+            "link": "shopify://collections/all",
+            "button_style": "btn--white",
+            "text_position": "middle-center",
+            "text_color": "#ffffff",
+            "overlay_style": "radial",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2"
+      ],
+      "settings": {
+        "height": "two-thirds",
+        "height_mobile": "two-thirds",
+        "transition": "slide",
+        "autoplay": true,
+        "autoplay_speed": 6,
+        "show_arrows": true,
+        "show_dots": true
+      }
+    },
+    "new_in": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "NEW IN",
+        "heading_align": "center",
+        "collection": "new-in",
+        "limit": 20,
+        "show_view_all": true,
+        "view_all_label": "Ver todo",
+        "layout": "slider",
+        "columns": 5,
+        "columns_medium": 3,
+        "visible_mobile": "1.6",
+        "padding_top": 30,
+        "padding_bottom": 30
+      }
+    },
+    "tabs": {
+      "type": "tab-collections",
+      "blocks": {
+        "tab_1": {
+          "type": "collection",
+          "settings": {
+            "collection": "invitada-oton"
+          }
+        }
+      },
+      "block_order": [
+        "tab_1"
+      ],
+      "settings": {
+        "title": "INVITADA OTOÑO",
+        "limit": 12,
+        "columns": 4,
+        "columns_medium": 2,
+        "visible_mobile": "1.6",
+        "padding_top": 30,
+        "padding_bottom": 30
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "subheading_1": {
+          "type": "subheading",
+          "settings": {
+            "text": "ETIQUÉTANOS EN"
+          }
+        },
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "text": "@tumarca",
+            "size": "heading-small"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_1",
+        "heading_1"
+      ],
+      "settings": {
+        "text_align": "left",
+        "padding_top": 82,
+        "padding_bottom": 0
+      }
+    },
+    "press_logos": {
+      "type": "press-logos",
+      "blocks": {
+        "logo_1": {
+          "type": "logo",
+          "settings": {
+            "name": "Medio 1",
+            "quote": "<p>\"Una de las marcas de referencia de las que todo el mundo habla.\"</p>"
+          }
+        },
+        "logo_2": {
+          "type": "logo",
+          "settings": {
+            "name": "Medio 2",
+            "quote": "<p>\"Una marca que marca tendencia.\"</p>"
+          }
+        },
+        "logo_3": {
+          "type": "logo",
+          "settings": {
+            "name": "Medio 3",
+            "quote": "<p>\"Una firma emergente que lucen caras conocidas.\"</p>"
+          }
+        },
+        "logo_4": {
+          "type": "logo",
+          "settings": {
+            "name": "Medio 4",
+            "quote": "<p>\"Una de las colecciones de vestidos más encantadoras de la temporada.\"</p>"
+          }
+        },
+        "logo_5": {
+          "type": "logo",
+          "settings": {
+            "name": "Medio 5",
+            "quote": "<p>\"Prendas listas para pasar del trabajo al after-work.\"</p>"
+          }
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3",
+        "logo_4",
+        "logo_5"
+      ],
+      "settings": {
+        "title": "VISTO EN",
+        "logo_width": 100,
+        "logo_opacity": 60,
+        "speed": 4,
+        "padding_top": 30,
+        "padding_bottom": 50
+      }
+    },
+    "collections_carousel": {
+      "type": "collection-carousel",
+      "blocks": {
+        "c1": {
+          "type": "collection",
+          "settings": {
+            "collection": "dresses",
+            "label": "VESTIDOS"
+          }
+        },
+        "c2": {
+          "type": "collection",
+          "settings": {
+            "collection": "sets-total-look",
+            "label": "CONJUNTOS | TOTAL LOOK"
+          }
+        },
+        "c3": {
+          "type": "collection",
+          "settings": {
+            "collection": "tops-t-shirts",
+            "label": "TOPS | CAMISETAS"
+          }
+        },
+        "c4": {
+          "type": "collection",
+          "settings": {
+            "collection": "blouse-shirt",
+            "label": "BLUSAS | CAMISAS"
+          }
+        },
+        "c5": {
+          "type": "collection",
+          "settings": {
+            "collection": "trousers",
+            "label": "PANTALONES"
+          }
+        },
+        "c6": {
+          "type": "collection",
+          "settings": {
+            "collection": "skirts",
+            "label": "FALDAS"
+          }
+        },
+        "c7": {
+          "type": "collection",
+          "settings": {
+            "collection": "jackets",
+            "label": "CHAQUETAS"
+          }
+        },
+        "c8": {
+          "type": "collection",
+          "settings": {
+            "collection": "sweaters",
+            "label": "JERSÉIS"
+          }
+        },
+        "c9": {
+          "type": "collection",
+          "settings": {
+            "collection": "cardigans",
+            "label": "CÁRDIGANS"
+          }
+        },
+        "c10": {
+          "type": "collection",
+          "settings": {
+            "collection": "blazers",
+            "label": "BLAZERS"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "c8",
+        "c9",
+        "c10"
+      ],
+      "settings": {
+        "heading": "Descubre nuestras colecciones",
+        "description": "<p>Encuentra tu estilo en cada categoría</p>",
+        "heading_align": "center",
+        "heading_size": 26,
+        "per_view": 4,
+        "per_view_mobile": 1,
+        "media_height": 400,
+        "media_height_mobile": 400,
+        "slide_gap": 8,
+        "border_radius": 14,
+        "loop": true,
+        "show_dots": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "slideshow",
+    "new_in",
+    "tabs",
+    "rich_text",
+    "press_logos",
+    "collections_carousel"
+  ]
+}

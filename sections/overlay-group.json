@@ -1,0 +1,11 @@
+{
+  "type": "custom.overlay",
+  "name": "Grupo superpuesto",
+  "sections": {
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {}
+    }
+  },
+  "order": ["cart-drawer"]
+}

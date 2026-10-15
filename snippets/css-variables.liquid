@@ -1,0 +1,119 @@
+{%- liquid
+  assign heading_font = settings.type_heading_font
+  assign body_font = settings.type_body_font
+  assign heading_bold = heading_font | font_modify: 'weight', 'bold'
+  assign body_bold = body_font | font_modify: 'weight', 'bold'
+  assign body_italic = body_font | font_modify: 'style', 'italic'
+-%}
+<style>
+  {%- unless settings.heading_use_system_font -%}
+    {{ heading_font | font_face: font_display: 'swap' }}
+    {{ heading_bold | font_face: font_display: 'swap' }}
+  {%- endunless -%}
+  {%- unless settings.body_use_system_font -%}
+    {{ body_font | font_face: font_display: 'swap' }}
+    {{ body_bold | font_face: font_display: 'swap' }}
+    {{ body_italic | font_face: font_display: 'swap' }}
+  {%- endunless -%}
+
+  :root {
+    /* === Tipografía === */
+    {%- if settings.heading_use_system_font %}
+      --FONT-STACK-HEADING: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;
+      --FONT-WEIGHT-HEADING: 700;
+    {%- else %}
+      --FONT-STACK-HEADING: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+      --FONT-WEIGHT-HEADING: {{ heading_font.weight }};
+    {%- endif %}
+    --FONT-STACK-NAV: var(--FONT-STACK-HEADING);
+    {%- if settings.body_use_system_font %}
+      --FONT-STACK-BODY: Helvetica, Arial, sans-serif;
+      --FONT-WEIGHT-BODY: 400;
+      --FONT-WEIGHT-BODY-BOLD: 700;
+    {%- else %}
+      --FONT-STACK-BODY: {{ body_font.family }}, {{ body_font.fallback_families }};
+      --FONT-WEIGHT-BODY: {{ body_font.weight }};
+      --FONT-WEIGHT-BODY-BOLD: {{ body_bold.weight | default: 700 }};
+    {%- endif %}
+    --FONT-STACK-SUBHEADING: var(--FONT-STACK-BODY);
+    --FONT-WEIGHT-NAV: 400;
+    --FONT-WEIGHT-NAV-BOLD: 700;
+    --FONT-WEIGHT-SUBHEADING: 400;
+    --FONT-UPPERCASE-HEADING: {% if settings.heading_uppercase %}uppercase{% else %}none{% endif %};
+    --FONT-UPPERCASE-SUBHEADING: uppercase;
+    --LETTER-SPACING-HEADING: {{ settings.heading_letter_spacing | divided_by: 1000.0 }}em;
+    --LETTER-SPACING-BODY: 0em;
+    --LETTER-SPACING-NAV: 0em;
+    --LETTER-SPACING-SUBHEADING: 0em;
+
+    --FONT-SIZE-BASE: {{ settings.body_size }}px;
+    --FONT-SIZE-NAV: {{ settings.nav_size }}px;
+    --FONT-SIZE-SUBHEADING-DESKTOP: 14px;
+    --FONT-SIZE-SUBHEADING-MOBILE: 12px;
+    --font-body-small: calc(var(--FONT-SIZE-BASE) * 0.9);
+
+    --FONT-HEADING-X-LARGE: 60px;
+    --FONT-HEADING-X-LARGE-MOBILE: 45px;
+    --FONT-HEADING-LARGE: 48px;
+    --FONT-HEADING-LARGE-MOBILE: 32px;
+    --FONT-HEADING-MEDIUM: 36px;
+    --FONT-HEADING-MEDIUM-MOBILE: 24px;
+    --FONT-HEADING-SMALL: {{ settings.heading_small_size }}px;
+    --FONT-HEADING-SMALL-MOBILE: {{ settings.heading_small_size }}px;
+    --FONT-HEADING-X-SMALL: 16px;
+    --FONT-HEADING-X-SMALL-MOBILE: 16px;
+    --FONT-HEADING-MINI: 12px;
+    --FONT-HEADING-MINI-MOBILE: 12px;
+
+    /* === Colores === */
+    --COLOR-BG: {{ settings.color_bg }};
+    --COLOR-BG-ACCENT: {{ settings.color_bg_accent }};
+    --COLOR-TEXT: {{ settings.color_text }};
+    --COLOR-TEXT-HOVER: {{ settings.color_text | color_modify: 'alpha', 0.7 }};
+    --COLOR-TEXT-LIGHT: {{ settings.color_text_light }};
+    --COLOR-BORDER: {{ settings.color_border }};
+    --COLOR-BORDER-LIGHT: {{ settings.color_border | color_mix: settings.color_bg, 50 }};
+    --COLOR-BORDER-HAIRLINE: {{ settings.color_text | color_mix: settings.color_bg, 6 }};
+    --COLOR-ACCENT: {{ settings.color_accent }};
+    --COLOR-ACCENT-LIGHT: {{ settings.color_accent | color_lighten: 25 }};
+    --COLOR-HIGHLIGHT: {{ settings.color_nav_highlight }};
+    --COLOR-SALE: {{ settings.color_sale }};
+    --FREE-SHIPPING-GRADIENT: linear-gradient(to right, var(--COLOR-ACCENT-LIGHT) 0%, var(--COLOR-ACCENT) 100%);
+
+    --BTN-PRIMARY-BG: {{ settings.btn_primary_bg }};
+    --BTN-PRIMARY-TEXT: {{ settings.btn_primary_text }};
+    --BTN-PRIMARY-BORDER: {{ settings.btn_primary_bg }};
+    --BTN-SECONDARY-BG: {{ settings.btn_secondary_bg }};
+    --BTN-SECONDARY-TEXT: {{ settings.btn_secondary_text }};
+    --BTN-SECONDARY-BORDER: {{ settings.btn_secondary_bg }};
+
+    --COLOR-BADGE-BG: {{ settings.badge_bg }};
+    --COLOR-BADGE-TEXT: {{ settings.badge_text }};
+    --COLOR-SALE-BG: {{ settings.badge_sale_bg }};
+    --COLOR-SALE-TEXT: {{ settings.badge_sale_text }};
+    --COLOR-SOLD-BG: {{ settings.badge_sold_bg }};
+    --COLOR-SOLD-TEXT: {{ settings.badge_sold_text }};
+    --COLOR-PREORDER-BG: {{ settings.badge_preorder_bg }};
+    --COLOR-PREORDER-TEXT: {{ settings.badge_preorder_text }};
+    --COLOR-CUSTOM-BADGE-BG: {{ settings.badge_custom_bg }};
+    --COLOR-CUSTOM-BADGE-TEXT: {{ settings.badge_custom_text }};
+
+    /* === Forma y espaciado === */
+    --RADIUS: {{ settings.button_radius }}px;
+    --RADIUS-SELECT: {{ settings.input_radius }}px;
+    --ICON-STROKE-WIDTH: {{ settings.icon_stroke }}px;
+    --PAGE-WIDTH: {{ settings.page_width }}px;
+    --gutter: 20px;
+    --grid-gap: {{ settings.grid_gap }}px;
+    --card-ratio: {{ settings.product_card_ratio }};
+
+    --HEADER-HEIGHT: 77px;
+    --HEADER-HEIGHT-MOBILE: 61px;
+  }
+
+  @media (min-width: 750px) {
+    :root {
+      --gutter: {{ settings.gutter_desktop }}px;
+    }
+  }
+</style>

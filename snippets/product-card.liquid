@@ -1,0 +1,211 @@
+{%- comment -%}
+  Tarjeta de producto.
+  Parámetros:
+  - product: objeto producto (obligatorio)
+  - lazy: true/false (carga diferida de imagen)
+  - show_quick_add: true/false (por defecto true)
+{%- endcomment -%}
+{%- liquid
+  assign show_quick_add = show_quick_add | default: settings.show_quick_add
+  if product == blank
+    assign is_placeholder = true
+  endif
+
+  assign preorder_tag = settings.badge_preorder_tag | downcase | strip
+  assign custom_prefix = settings.badge_custom_prefix | downcase | strip
+  assign is_preorder = false
+  assign custom_badges = ''
+  for tag in product.tags
+    assign tag_down = tag | downcase | strip
+    if preorder_tag != blank and tag_down == preorder_tag
+      assign is_preorder = true
+    endif
+    if custom_prefix != blank and tag_down contains custom_prefix
+      assign prefix_size = custom_prefix | size
+      assign badge_text = tag | slice: prefix_size, 100 | strip
+      if badge_text != blank
+        assign custom_badges = custom_badges | append: badge_text | append: '||'
+      endif
+    endif
+  endfor
+  if product.metafields.custom.preorder == true
+    assign is_preorder = true
+  endif
+  assign custom_badges = custom_badges | split: '||'
+
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  assign size_option = nil
+  assign size_names = settings.quick_add_size_names | downcase | split: ','
+  for option in product.options_with_values
+    assign option_down = option.name | downcase | strip
+    for n in size_names
+      assign n_clean = n | strip
+      if option_down == n_clean
+        assign size_option = option
+      endif
+    endfor
+  endfor
+
+  assign image = product.featured_media.preview_image
+  assign hover_image = nil
+  if settings.product_card_hover and product.media.size > 1
+    assign hover_image = product.media[1].preview_image
+  endif
+
+  assign image_alt = image.alt | default: product.title
+  assign hover_alt = hover_image.alt | default: product.title
+  assign siblings = product.metafields.custom.siblings.value
+-%}
+
+<div class="product-card animate-on-scroll">
+  <div class="product-card__media">
+    <a href="{{ product.url | default: '#' }}" tabindex="-1" aria-hidden="true">
+      {%- if image -%}
+        {{
+          image
+          | image_url: width: 900
+          | image_tag:
+            widths: '300, 400, 540, 720, 900',
+            sizes: '(min-width: 1100px) calc((100vw - 120px) / 5), (min-width: 750px) calc((100vw - 80px) / 3), 60vw',
+            loading: 'lazy',
+            class: 'product-card__img',
+            alt: image_alt
+        }}
+        {%- if hover_image -%}
+          {{
+            hover_image
+            | image_url: width: 900
+            | image_tag:
+              widths: '300, 400, 540, 720, 900',
+              sizes: '(min-width: 1100px) calc((100vw - 120px) / 5), (min-width: 750px) calc((100vw - 80px) / 3), 60vw',
+              loading: 'lazy',
+              class: 'product-card__img product-card__img--hover',
+              alt: hover_alt
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {%- assign placeholder_index = placeholder_index | default: 1 -%}
+        {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </a>
+
+    <div class="product-card__badges body-medium">
+      {%- if product.available == false and is_placeholder != true -%}
+        <span class="badge badge--sold">{{ 'products.product.sold_out' | t }}</span>
+      {%- else -%}
+        {%- if is_preorder -%}
+          <span class="badge badge--preorder">{{ 'products.product.preorder' | t }}</span>
+        {%- endif -%}
+        {%- if on_sale and settings.show_sale_badge -%}
+          <span class="badge badge--sale">{{ 'products.product.on_sale' | t }}</span>
+        {%- endif -%}
+        {%- for badge in custom_badges -%}
+          <span class="badge badge--custom">{{ badge | escape }}</span>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if settings.show_wishlist and product.handle != blank -%}
+      <button type="button" class="product-card__wishlist" data-wishlist-toggle="{{ product.handle }}" aria-pressed="false" aria-label="{{ 'products.product.wishlist' | t }}">
+        {%- render 'icon', icon: 'heart' -%}
+      </button>
+    {%- endif -%}
+
+    {%- if show_quick_add and product.available and is_placeholder != true -%}
+      <div class="product-card__quick-add">
+        {%- if product.has_only_default_variant -%}
+          {%- form 'product', product, data-product-form: '', data-quick-add: '' -%}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="btn btn--small">
+              {%- if is_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif -%}
+            </button>
+          {%- endform -%}
+        {%- elsif size_option and product.options.size == 1 -%}
+          <div class="quick-add__sizes">
+            <span class="quick-add__sizes-label">
+              {%- if is_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif -%}
+            </span>
+            {%- for variant in product.variants -%}
+              <button
+                type="button"
+                class="quick-add__size"
+                data-quick-add-variant="{{ variant.id }}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{- variant.title | escape -}}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <a href="{{ product.url }}" class="btn btn--small">{{ 'products.product.choose_options' | t }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="product-card__info body-medium">
+    <a href="{{ product.url | default: '#' }}" class="product-card__title">
+      {{- product.title | default: 'Producto de ejemplo' | escape -}}
+    </a>
+
+    {%- if is_placeholder -%}
+      <span class="price"><span>{{ 4990 | money }}</span></span>
+    {%- else -%}
+      {%- render 'price', product: product, show_sold_out: true -%}
+    {%- endif -%}
+
+    {%- if settings.show_swatches -%}
+      {%- if siblings != blank -%}
+        <div class="product-card__swatches">
+          {%- for sibling in siblings limit: 4 -%}
+            <a
+              href="{{ sibling.url }}"
+              class="swatch"
+              title="{{ sibling.title | escape }}"
+              style="background-image: url('{{ sibling.featured_media | image_url: width: 60 }}');"
+            >
+              <span class="visually-hidden">{{ sibling.title | escape }}</span>
+            </a>
+          {%- endfor -%}
+          {%- if siblings.size > 4 -%}
+            <span class="swatch swatch--more">+{{ siblings.size | minus: 4 }}</span>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        {%- assign color_names = settings.swatch_option_names | downcase | split: ',' -%}
+        {%- for option in product.options_with_values -%}
+          {%- assign option_down = option.name | downcase | strip -%}
+          {%- assign is_color = false -%}
+          {%- for n in color_names -%}
+            {%- assign n_clean = n | strip -%}
+            {%- if option_down == n_clean %}{% assign is_color = true %}{% endif -%}
+          {%- endfor -%}
+          {%- if is_color and option.values.size > 1 -%}
+            <div class="product-card__swatches">
+              {%- for value in option.values limit: 5 -%}
+                {%- liquid
+                  assign swatch_bg = value | handle | replace: '-', ''
+                  if value.swatch.color
+                    assign swatch_bg = value.swatch.color
+                  endif
+                -%}
+                <span
+                  class="swatch"
+                  title="{{ value | escape }}"
+                  style="--swatch: {{ swatch_bg }};{% if value.swatch.image %} background-image: url('{{ value.swatch.image | image_url: width: 40 }}');{% endif %}"
+                ></span>
+              {%- endfor -%}
+              {%- if option.values.size > 5 -%}
+                <span class="swatch swatch--more">+{{ option.values.size | minus: 5 }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

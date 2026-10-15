@@ -1,0 +1,43 @@
+{%- liquid
+  assign logo = section.settings.logo
+  assign logo_transparent = section.settings.logo_transparent
+  assign tag = 'div'
+  assign sizes = section.settings.logo_width | at_least: section.settings.logo_width_mobile | append: 'px'
+  assign color_class = 'logo__img logo__img--color'
+  if logo_transparent != blank
+    assign color_class = 'logo__img logo__img--color has-transparent'
+  endif
+  if template.name == 'index' and is_mobile != true
+    assign tag = 'h1'
+  endif
+-%}
+<{{ tag }} style="margin: 0; font-size: inherit;">
+  <a href="{{ routes.root_url }}">
+    {%- if logo != blank -%}
+      {{
+        logo
+        | image_url: width: 600
+        | image_tag:
+          widths: '120, 240, 360, 480, 600',
+          sizes: sizes,
+          class: color_class,
+          alt: shop.name,
+          loading: 'eager'
+      }}
+      {%- if logo_transparent != blank -%}
+        {{
+          logo_transparent
+          | image_url: width: 600
+          | image_tag:
+            widths: '120, 240, 360, 480, 600',
+            sizes: sizes,
+            class: 'logo__img logo__img--transparent',
+            alt: shop.name,
+            loading: 'eager'
+        }}
+      {%- endif -%}
+    {%- else -%}
+      <span class="header__logo-text">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+</{{ tag }}>

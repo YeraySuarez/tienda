@@ -1,0 +1,59 @@
+<div class="account">
+  <div id="LoginForm">
+    <h1 class="heading-small">{{ 'customer.login.title' | t }}</h1>
+    {%- form 'customer_login', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="field">
+        <label for="CustomerEmail">{{ 'customer.login.email' | t }}</label>
+        <input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" required>
+      </div>
+      {%- if form.password_needed -%}
+        <div class="field">
+          <label for="CustomerPassword">{{ 'customer.login.password' | t }}</label>
+          <input type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+        </div>
+      {%- endif -%}
+      <button type="submit" class="btn btn--full">{{ 'customer.login.submit' | t }}</button>
+      <div class="account__links">
+        <a href="#RecoverPassword" onclick="document.getElementById('LoginForm').hidden=true;document.getElementById('RecoverPassword').hidden=false;return false;">{{ 'customer.login.forgot_password' | t }}</a>
+        <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+
+  <div id="RecoverPassword" hidden>
+    <h1 class="heading-small">{{ 'customer.recover_password.title' | t }}</h1>
+    <p class="text-center" style="margin-bottom: 20px;">{{ 'customer.recover_password.subtext' | t }}</p>
+    {%- form 'recover_customer_password' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="form-message">{{ 'customer.recover_password.success' | t }}</p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="field">
+        <label for="RecoverEmail">{{ 'customer.login.email' | t }}</label>
+        <input type="email" name="email" id="RecoverEmail" autocomplete="email" required>
+      </div>
+      <button type="submit" class="btn btn--full">{{ 'customer.recover_password.submit' | t }}</button>
+      <div class="account__links">
+        <a href="#LoginForm" onclick="document.getElementById('LoginForm').hidden=false;document.getElementById('RecoverPassword').hidden=true;return false;">{{ 'customer.recover_password.cancel' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+
+  {%- if shop.checkout.guest_login -%}
+    <div style="margin-top: 40px;">
+      <h2 class="heading-x-small text-center" style="margin-bottom: 14px;">{{ 'customer.login.guest_title' | t }}</h2>
+      {%- form 'guest_login' -%}
+        <button type="submit" class="btn btn--full btn--outline">{{ 'customer.login.guest_continue' | t }}</button>
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Iniciar sesión", "class": "section-main-login", "settings": [] }
+{% endschema %}

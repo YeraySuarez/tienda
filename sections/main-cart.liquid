@@ -1,0 +1,43 @@
+<div class="cart-page" data-main-cart>
+  <h1 class="heading-small text-center" style="margin-bottom: 30px;">{{ 'cart.general.title' | t }}</h1>
+
+  {%- if cart.item_count > 0 -%}
+    <div class="cart-page__grid">
+      <div>
+        {%- render 'free-shipping-bar' -%}
+        {%- render 'cart-items' -%}
+      </div>
+      <form action="{{ routes.cart_url }}" method="post" class="cart-page__summary">
+        {%- if settings.cart_notes -%}
+          <label for="CartNote" class="visually-hidden">{{ 'cart.general.note' | t }}</label>
+          <textarea id="CartNote" name="note" placeholder="{{ 'cart.general.note' | t }}">{{ cart.note }}</textarea>
+        {%- endif -%}
+        {%- for discount in cart.cart_level_discount_applications -%}
+          <div class="cart__total" style="font-weight: 400; font-size: inherit;">
+            <span>{{ discount.title | escape }}</span>
+            <span>-{{ discount.total_allocated_amount | money }}</span>
+          </div>
+        {%- endfor -%}
+        <div class="cart__total">
+          <span>{{ 'cart.general.subtotal' | t }}</span>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+        <button type="submit" name="checkout" class="btn btn--full">{{ 'cart.general.checkout' | t }}</button>
+        <em class="cart__note-text">{{ 'cart.general.taxes_and_shipping' | t }}</em>
+      </form>
+    </div>
+  {%- else -%}
+    <div class="empty-state">
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="btn">{{ 'cart.general.continue_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Carrito",
+  "class": "section-main-cart",
+  "settings": []
+}
+{% endschema %}

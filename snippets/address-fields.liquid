@@ -1,0 +1,23 @@
+{%- if form.errors -%}
+  <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+{%- endif -%}
+<div class="field"><label for="FirstName-{{ prefix }}">{{ 'customer.register.first_name' | t }}</label><input type="text" id="FirstName-{{ prefix }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"></div>
+<div class="field"><label for="LastName-{{ prefix }}">{{ 'customer.register.last_name' | t }}</label><input type="text" id="LastName-{{ prefix }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"></div>
+<div class="field"><label for="Company-{{ prefix }}">{{ 'customer.addresses.company' | t }}</label><input type="text" id="Company-{{ prefix }}" name="address[company]" value="{{ form.company }}" autocomplete="organization"></div>
+<div class="field"><label for="Address1-{{ prefix }}">{{ 'customer.addresses.address1' | t }}</label><input type="text" id="Address1-{{ prefix }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1"></div>
+<div class="field"><label for="Address2-{{ prefix }}">{{ 'customer.addresses.address2' | t }}</label><input type="text" id="Address2-{{ prefix }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"></div>
+<div class="field"><label for="City-{{ prefix }}">{{ 'customer.addresses.city' | t }}</label><input type="text" id="City-{{ prefix }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2"></div>
+<div class="field"><label for="Country-{{ prefix }}">{{ 'customer.addresses.country' | t }}</label><select id="Country-{{ prefix }}" name="address[country]" autocomplete="country">{{ all_country_option_tags }}</select></div>
+<div class="field"><label for="Province-{{ prefix }}">{{ 'customer.addresses.province' | t }}</label><input type="text" id="Province-{{ prefix }}" name="address[province]" value="{{ form.province }}" autocomplete="address-level1"></div>
+<div class="field"><label for="Zip-{{ prefix }}">{{ 'customer.addresses.zip' | t }}</label><input type="text" id="Zip-{{ prefix }}" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"></div>
+<div class="field"><label for="Phone-{{ prefix }}">{{ 'customer.addresses.phone' | t }}</label><input type="tel" id="Phone-{{ prefix }}" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"></div>
+<div class="field"><label><input type="checkbox" name="address[default]" value="1"{% if form.set_as_default_checkbox %} checked{% endif %}> {{ 'customer.addresses.set_default' | t }}</label></div>
+<button type="submit" class="btn">{{ 'customer.addresses.save' | t }}</button>
+{%- if form.country != blank -%}
+  <script>
+    (function () {
+      var s = document.getElementById('Country-{{ prefix }}');
+      if (s) s.value = {{ form.country | json }};
+    })();
+  </script>
+{%- endif -%}

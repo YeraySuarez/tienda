@@ -1,0 +1,24 @@
+{%- if predictive_search.performed -%}
+  <div class="predictive-results">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <div class="predictive-results__grid">
+        {%- for product in predictive_search.resources.products -%}
+          <a href="{{ product.url }}" class="predictive-results__item">
+            {%- if product.featured_media -%}
+              {{ product.featured_media | image_url: width: 400 | image_tag: loading: 'lazy', alt: product.title }}
+            {%- endif -%}
+            <div>{{ product.title | escape }}</div>
+            {%- render 'price', product: product -%}
+          </a>
+        {%- endfor -%}
+      </div>
+      <p style="margin-top: 16px; text-align: center;">
+        <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&type=product" class="btn btn--text">
+          {{- 'general.search.view_all' | t -}}
+        </a>
+      </p>
+    {%- else -%}
+      <p>{{ 'general.search.no_results' | t: terms: predictive_search.terms }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

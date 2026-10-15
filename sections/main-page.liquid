@@ -1,0 +1,14 @@
+<div class="page-header">
+  <h1 class="heading-small">{{ page.title | escape }}</h1>
+</div>
+<div class="wrapper--narrow page-content rte body-medium">
+  {{ page.content }}
+</div>
+
+{% schema %}
+{
+  "name": "Página",
+  "class": "section-main-page",
+  "settings": []
+}
+{% endschema %}

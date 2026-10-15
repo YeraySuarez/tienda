@@ -1,0 +1,74 @@
+{
+  "type": "footer",
+  "name": "Grupo de footer",
+  "sections": {
+    "multicolumn": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_1": {
+          "type": "column",
+          "settings": {
+            "icon": "truck",
+            "icon_size": 20,
+            "title": "Envío internacional",
+            "text": "<p>Con packaging cuidado</p>"
+          }
+        },
+        "column_2": {
+          "type": "column",
+          "settings": {
+            "icon": "star",
+            "icon_size": 20,
+            "title": "Nuestra comunidad",
+            "text": "<p>Miles de clientas ya forman parte</p>"
+          }
+        },
+        "column_3": {
+          "type": "column",
+          "settings": {
+            "icon": "heart",
+            "icon_size": 20,
+            "title": "Drops mensuales",
+            "text": "<p>Con las últimas tendencias</p>"
+          }
+        }
+      },
+      "block_order": ["column_1", "column_2", "column_3"],
+      "settings": {
+        "columns": 3,
+        "columns_mobile": "1",
+        "text_align": "center",
+        "padding_top": 30,
+        "padding_bottom": 30
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu_1": {
+          "type": "menu",
+          "settings": {
+            "title": "INFO",
+            "menu": "footer"
+          }
+        },
+        "menu_2": {
+          "type": "menu",
+          "settings": {
+            "title": "POLÍTICAS",
+            "menu": "politicas"
+          }
+        }
+      },
+      "block_order": ["menu_1", "menu_2"],
+      "settings": {
+        "logo_width": 100,
+        "show_payment_icons": true,
+        "show_country_selector": true,
+        "padding_top": 30,
+        "padding_bottom": 30
+      }
+    }
+  },
+  "order": ["multicolumn", "footer"]
+}

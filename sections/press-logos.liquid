@@ -1,0 +1,136 @@
+<div
+  class="logos section-padding"
+  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px; --logo-opacity: {{ section.settings.logo_opacity | divided_by: 100.0 }}; --logo-width: {{ section.settings.logo_width }}px;"
+  data-logos
+  data-speed="{{ section.settings.speed | times: 1000 }}"
+>
+  {%- if section.settings.title != blank -%}
+    <h2 class="logos__title subheading">{{ section.settings.title | escape }}</h2>
+  {%- endif -%}
+
+  <div class="logos__list">
+    {%- for block in section.blocks -%}
+      <button type="button" class="logos__item{% if forloop.first %} is-active{% endif %}" aria-label="{{ block.settings.name | default: forloop.index | escape }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.logo != blank -%}
+          {{
+            block.settings.logo
+            | image_url: width: 400
+            | image_tag: widths: '100, 200, 300, 400', sizes: '100px', loading: 'lazy', alt: block.settings.name
+          }}
+        {%- else -%}
+          <span class="logos__item-placeholder"></span>
+        {%- endif -%}
+      </button>
+    {%- endfor -%}
+  </div>
+
+  <div class="logos__quotes body-medium" aria-live="polite">
+    {%- for block in section.blocks -%}
+      <div class="logos__quote{% if forloop.first %} is-active{% endif %}">
+        {{- block.settings.quote -}}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Logos de prensa",
+  "class": "section-logos",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "VISTO EN"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Ancho de los logos",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "logo_opacity",
+      "label": "Opacidad de logos inactivos",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Cambiar cita cada",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado superior",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado inferior",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre del medio"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Cita",
+          "default": "<p>\"Una de las marcas de referencia de las que todo el mundo habla.\"</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logos de prensa",
+      "blocks": [
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

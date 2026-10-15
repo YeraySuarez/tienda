@@ -1,0 +1,18 @@
+<div data-wishlist-page style="--COLUMNS: 4; --COLUMNS-MEDIUM: 3; --COLUMNS-MOBILE-GRID: 2; padding-bottom: 60px;">
+  <div class="page-header">
+    <h1 class="heading-small">{{ page.title | escape }}</h1>
+  </div>
+  <div class="product-grid" data-wishlist-grid></div>
+  <div class="empty-state" data-wishlist-empty hidden>
+    <p>{{ 'products.product.wishlist_empty' | t }}</p>
+    <a href="{{ routes.all_products_collection_url }}" class="btn">{{ 'cart.general.continue_shopping' | t }}</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Lista de deseos",
+  "class": "section-main-wishlist",
+  "settings": []
+}
+{% endschema %}

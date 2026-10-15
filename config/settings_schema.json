@@ -1,0 +1,513 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Tienda",
+    "theme_version": "1.0.0",
+    "theme_author": "Tienda",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com"
+  },
+  {
+    "name": "Logo y favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 x 32 px recomendado"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_loading_screen",
+        "label": "Mostrar pantalla de carga con logo",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "loading_logo",
+        "label": "Logo de la pantalla de carga"
+      }
+    ]
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Fondo",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_accent",
+        "label": "Fondo de acento (imágenes, cajas)",
+        "default": "#f1f1f1"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "color_text_light",
+        "label": "Texto secundario",
+        "default": "#646464"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Bordes",
+        "default": "#d1cdc4"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Acento",
+        "default": "#938e85"
+      },
+      {
+        "type": "color",
+        "id": "color_nav_highlight",
+        "label": "Enlace destacado del menú",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Precio rebajado",
+        "default": "#b42318"
+      },
+      {
+        "type": "header",
+        "content": "Botones"
+      },
+      {
+        "type": "color",
+        "id": "btn_primary_bg",
+        "label": "Botón principal — fondo",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "btn_primary_text",
+        "label": "Botón principal — texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "btn_secondary_bg",
+        "label": "Botón secundario — fondo",
+        "default": "#ab8c52"
+      },
+      {
+        "type": "color",
+        "id": "btn_secondary_text",
+        "label": "Botón secundario — texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Etiquetas de producto"
+      },
+      {
+        "type": "color",
+        "id": "badge_bg",
+        "label": "Etiqueta — fondo",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "badge_text",
+        "label": "Etiqueta — texto",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "badge_sale_bg",
+        "label": "Oferta — fondo",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "badge_sale_text",
+        "label": "Oferta — texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "badge_sold_bg",
+        "label": "Agotado — fondo",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "badge_sold_text",
+        "label": "Agotado — texto",
+        "default": "#646464"
+      },
+      {
+        "type": "color",
+        "id": "badge_preorder_bg",
+        "label": "Pre-order — fondo",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "badge_preorder_text",
+        "label": "Pre-order — texto",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "badge_custom_bg",
+        "label": "Etiqueta personalizada — fondo",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "badge_custom_text",
+        "label": "Etiqueta personalizada — texto",
+        "default": "#212121"
+      }
+    ]
+  },
+  {
+    "name": "Tipografía",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Títulos y menú"
+      },
+      {
+        "type": "checkbox",
+        "id": "heading_use_system_font",
+        "label": "Usar fuente del sistema para títulos",
+        "info": "Igual que el diseño original (system-ui). Desactívalo para elegir otra fuente.",
+        "default": true
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Fuente de títulos",
+        "default": "inter_n7"
+      },
+      {
+        "type": "checkbox",
+        "id": "heading_uppercase",
+        "label": "Títulos en mayúsculas",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "heading_letter_spacing",
+        "label": "Espaciado de letras en títulos",
+        "min": -50,
+        "max": 200,
+        "step": 5,
+        "unit": "‰",
+        "default": -25
+      },
+      {
+        "type": "range",
+        "id": "heading_small_size",
+        "label": "Tamaño de títulos de sección",
+        "min": 14,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "nav_size",
+        "label": "Tamaño del menú",
+        "min": 10,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "header",
+        "content": "Texto"
+      },
+      {
+        "type": "checkbox",
+        "id": "body_use_system_font",
+        "label": "Usar Helvetica para el texto",
+        "info": "Igual que el diseño original (Helvetica, Arial). Desactívalo para elegir otra fuente.",
+        "default": true
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Fuente del texto",
+        "default": "inter_n4"
+      },
+      {
+        "type": "range",
+        "id": "body_size",
+        "label": "Tamaño del texto",
+        "min": 11,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 13
+      }
+    ]
+  },
+  {
+    "name": "Diseño",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Ancho máximo de página",
+        "min": 1000,
+        "max": 1800,
+        "step": 50,
+        "unit": "px",
+        "default": 1400
+      },
+      {
+        "type": "range",
+        "id": "gutter_desktop",
+        "label": "Margen lateral (escritorio)",
+        "min": 10,
+        "max": 60,
+        "step": 2,
+        "unit": "px",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "grid_gap",
+        "label": "Separación de cuadrícula",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "button_radius",
+        "label": "Redondeo de botones",
+        "min": 0,
+        "max": 300,
+        "step": 4,
+        "unit": "px",
+        "default": 300
+      },
+      {
+        "type": "range",
+        "id": "input_radius",
+        "label": "Redondeo de campos",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "default": 22
+      },
+      {
+        "type": "range",
+        "id": "icon_stroke",
+        "label": "Grosor de iconos",
+        "min": 0.5,
+        "max": 2,
+        "step": 0.1,
+        "unit": "px",
+        "default": 1
+      }
+    ]
+  },
+  {
+    "name": "Tarjetas de producto",
+    "settings": [
+      {
+        "type": "select",
+        "id": "product_card_ratio",
+        "label": "Proporción de imagen",
+        "options": [
+          {
+            "value": "0.8333",
+            "label": "Retrato 5:6"
+          },
+          {
+            "value": "0.75",
+            "label": "Retrato 3:4"
+          },
+          {
+            "value": "0.6667",
+            "label": "Retrato 2:3"
+          },
+          {
+            "value": "1",
+            "label": "Cuadrada"
+          }
+        ],
+        "default": "0.8333"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_hover",
+        "label": "Mostrar segunda imagen al pasar el ratón",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_quick_add",
+        "label": "Mostrar compra rápida",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "quick_add_size_names",
+        "label": "Nombres de la opción de talla",
+        "info": "Separados por comas. Si el producto solo tiene esta opción, se muestran las tallas en la compra rápida.",
+        "default": "Talla,Size,Tamanho,Tamaño"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_swatches",
+        "label": "Mostrar muestras de color",
+        "info": "Usa el metacampo custom.siblings (lista de productos) para mostrar los otros colores, o la opción de color del producto.",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "swatch_option_names",
+        "label": "Nombres de la opción de color",
+        "default": "Color,Colour,Cor"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_wishlist",
+        "label": "Mostrar botón de lista de deseos",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Etiquetas"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sale_badge",
+        "label": "Mostrar etiqueta de oferta",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_preorder_tag",
+        "label": "Etiqueta (tag) de Pre-order",
+        "info": "Los productos con este tag muestran 'Pre-order'. También funciona con el metacampo custom.preorder = true.",
+        "default": "pre-order"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_prefix",
+        "label": "Prefijo para etiquetas personalizadas",
+        "info": "Un tag 'badge:Más vendidos' mostrará la etiqueta 'Más vendidos'.",
+        "default": "badge:"
+      }
+    ]
+  },
+  {
+    "name": "Carrito",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Tipo de carrito",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Lateral (drawer)"
+          },
+          {
+            "value": "page",
+            "label": "Página"
+          },
+          {
+            "value": "notification",
+            "label": "Notificación"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_free_shipping",
+        "label": "Mostrar barra de envío gratis",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Importe para envío gratis",
+        "info": "En la moneda principal de la tienda, sin decimales.",
+        "default": 250
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_notes",
+        "label": "Permitir notas del pedido",
+        "default": false
+      },
+      {
+        "type": "link_list",
+        "id": "cart_empty_menu",
+        "label": "Menú en carrito vacío",
+        "default": "main-menu"
+      }
+    ]
+  },
+  {
+    "name": "Redes sociales",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "placeholder": "https://instagram.com/tu-marca"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok",
+        "placeholder": "https://tiktok.com/@tu-marca"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "placeholder": "https://facebook.com/tu-marca"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest",
+        "placeholder": "https://pinterest.com/tu-marca"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube",
+        "placeholder": "https://youtube.com/@tu-marca"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp",
+        "label": "WhatsApp",
+        "placeholder": "https://wa.me/34600000000"
+      }
+    ]
+  }
+]

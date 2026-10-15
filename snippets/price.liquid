@@ -1,0 +1,35 @@
+{%- comment -%}
+  Uso: {% render 'price', product: product %} o {% render 'price', variant: variant %}
+{%- endcomment -%}
+{%- liquid
+  if variant
+    assign price = variant.price
+    assign compare = variant.compare_at_price
+    assign available = variant.available
+    assign varies = false
+  else
+    assign price = product.price
+    assign compare = product.compare_at_price
+    assign available = product.available
+    assign varies = product.price_varies
+  endif
+  assign price_money = price | money
+  assign on_sale = false
+  if compare > price
+    assign on_sale = true
+  endif
+-%}
+<span class="price">
+  {%- if available == false and show_sold_out -%}
+    <span>{{ 'products.product.sold_out' | t }}</span>
+  {%- elsif on_sale -%}
+    <span class="price__sale">
+      {%- if varies %}{{ 'products.product.price_from' | t: price: price_money }}{% else %}{{ price_money }}{% endif -%}
+    </span>
+    <s class="price__compare">{{ compare | money }}</s>
+  {%- else -%}
+    <span>
+      {%- if varies %}{{ 'products.product.price_from' | t: price: price_money }}{% else %}{{ price_money }}{% endif -%}
+    </span>
+  {%- endif -%}
+</span>

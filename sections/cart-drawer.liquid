@@ -1,0 +1,74 @@
+{%- comment -%}
+  Carrito lateral. Se vuelve a renderizar por AJAX (Section Rendering API)
+  con el id "cart-drawer" después de añadir/cambiar productos.
+{%- endcomment -%}
+<div id="cart-drawer" class="drawer drawer--right cart-drawer" aria-hidden="true">
+  <div class="drawer__underlay" data-drawer-close></div>
+  <div class="drawer__inner" role="dialog" aria-modal="true" aria-label="{{ 'cart.general.title' | t }}">
+    <div class="drawer__head">
+      <h3 class="drawer__heading">
+        {{ 'cart.general.title' | t }}
+        <span class="header__count" style="position: static;" data-cart-count data-count="{{ cart.item_count }}">{{ cart.item_count }}</span>
+      </h3>
+      <button type="button" class="drawer__close" data-drawer-close aria-label="{{ 'general.accessibility.close' | t }}">
+        {%- render 'icon', icon: 'close' -%}
+      </button>
+    </div>
+
+    <div data-cart-drawer-content style="display: contents;">
+      {%- if cart.item_count > 0 -%}
+        <div class="drawer__body">
+          {%- render 'free-shipping-bar' -%}
+          {%- render 'cart-items' -%}
+        </div>
+
+        <div class="drawer__foot">
+          <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm">
+            {%- if settings.cart_notes -%}
+              <label class="visually-hidden" for="CartDrawerNote">{{ 'cart.general.note' | t }}</label>
+              <textarea id="CartDrawerNote" name="note" placeholder="{{ 'cart.general.note' | t }}" style="min-height: 70px; margin-bottom: 14px;">{{ cart.note }}</textarea>
+            {%- endif -%}
+            <div class="cart__total">
+              <span>{{ 'cart.general.subtotal' | t }}</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <div class="cart__total" style="font-weight: 400; font-size: inherit;">
+                <span>{{ discount.title | escape }}</span>
+                <span>-{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {%- endfor -%}
+            <button type="submit" name="checkout" class="btn btn--full">{{ 'cart.general.checkout' | t }}</button>
+            <em class="cart__note-text">{{ 'cart.general.taxes_and_shipping' | t }}</em>
+          </form>
+        </div>
+      {%- else -%}
+        <div class="drawer__body">
+          <div class="cart-empty">
+            <p>{{ 'cart.general.empty' | t }}</p>
+            {%- assign empty_menu = linklists[settings.cart_empty_menu] -%}
+            {%- if empty_menu.links.size > 0 -%}
+              <div class="cart-empty__buttons">
+                {%- for link in empty_menu.links -%}
+                  <a href="{{ link.url }}" class="btn btn--full btn--outline">{{ link.title | escape }}</a>
+                {%- endfor -%}
+              </div>
+            {%- else -%}
+              <div class="cart-empty__buttons">
+                <a href="{{ routes.all_products_collection_url }}" class="btn btn--full">{{ 'cart.general.continue_shopping' | t }}</a>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Carrito lateral",
+  "class": "section-cart-drawer",
+  "settings": []
+}
+{% endschema %}

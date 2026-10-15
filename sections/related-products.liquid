@@ -1,0 +1,84 @@
+{%- comment -%}
+  Productos relacionados mediante la Product Recommendations API.
+{%- endcomment -%}
+<div
+  class="related-products section-padding"
+  style="--PT: 40px; --PB: 60px; --COLUMNS: {{ section.settings.columns }}; --COLUMNS-MEDIUM: 3; --visible-mobile: 1.6;"
+  data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}&intent=related"
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- if section.settings.title != blank -%}
+      <div class="grid__heading-holder">
+        <h2 class="heading-small">{{ section.settings.title }}</h2>
+      </div>
+    {%- endif -%}
+    <div class="product-slider" data-product-slider>
+      <div class="product-slider__track">
+        {%- for product in recommendations.products -%}
+          {%- render 'product-card', product: product -%}
+        {%- endfor -%}
+      </div>
+      <button type="button" class="product-slider__arrow product-slider__arrow--prev" aria-label="{{ 'general.slider.previous' | t }}">
+        {%- render 'icon', icon: 'chevron-left' -%}
+      </button>
+      <button type="button" class="product-slider__arrow product-slider__arrow--next" aria-label="{{ 'general.slider.next' | t }}">
+        {%- render 'icon', icon: 'chevron-right' -%}
+      </button>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    var el = document.querySelector('#shopify-section-{{ section.id }} [data-recommendations-url]');
+    if (!el || el.children.length) return;
+    fetch(el.getAttribute('data-recommendations-url'))
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var fresh = doc.querySelector('[data-recommendations-url]');
+        if (fresh && fresh.innerHTML.trim()) {
+          el.innerHTML = fresh.innerHTML;
+          el.closest('.shopify-section').dispatchEvent(new CustomEvent('shopify:section:load', { bubbles: true }));
+        }
+      });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Productos relacionados",
+  "class": "section-related-products",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Título",
+      "default": "También te puede gustar"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Número de productos",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columnas (escritorio)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Productos relacionados"
+    }
+  ]
+}
+{% endschema %}

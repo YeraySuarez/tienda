@@ -1,0 +1,173 @@
+<section
+  class="tabs-collections section-padding"
+  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px; --COLUMNS: {{ section.settings.columns }}; --COLUMNS-MEDIUM: {{ section.settings.columns_medium }}; --visible-mobile: {{ section.settings.visible_mobile }};"
+  data-tabs
+>
+  {%- if section.settings.title != blank -%}
+    <div class="grid__heading-holder">
+      <div class="grid__heading-text">
+        <h2 class="heading-small">{{ section.settings.title }}</h2>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="tabs-collections__nav" role="tablist">
+      {%- for block in section.blocks -%}
+        {%- assign tab_title = block.settings.title | default: block.settings.collection.title -%}
+        <button
+          type="button"
+          role="tab"
+          class="tabs-collections__tab{% if forloop.first %} is-active{% endif %}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="Tab-{{ section.id }}-{{ forloop.index }}"
+        >
+          {{- tab_title | default: 'Colección' | escape -}}
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    {%- assign collection = block.settings.collection -%}
+    <div
+      id="Tab-{{ section.id }}-{{ forloop.index }}"
+      class="tabs-collections__panel{% if forloop.first %} is-active{% endif %}"
+      role="tabpanel"
+      {{ block.shopify_attributes }}
+    >
+      <div class="product-slider" data-product-slider>
+        <div class="product-slider__track">
+          {%- if collection != blank and collection.products_count > 0 -%}
+            {%- for product in collection.products limit: section.settings.limit -%}
+              {%- render 'product-card', product: product -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              {%- render 'product-card', product: blank, placeholder_index: i -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        <button type="button" class="product-slider__arrow product-slider__arrow--prev" aria-label="{{ 'general.slider.previous' | t }}">
+          {%- render 'icon', icon: 'chevron-left' -%}
+        </button>
+        <button type="button" class="product-slider__arrow product-slider__arrow--next" aria-label="{{ 'general.slider.next' | t }}">
+          {%- render 'icon', icon: 'chevron-right' -%}
+        </button>
+      </div>
+
+      {%- if block.settings.button_label != blank and collection != blank -%}
+        <div class="tabs-collections__footer">
+          <a href="{{ collection.url }}" class="btn btn--small">{{ block.settings.button_label | escape }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</section>
+
+{% schema %}
+{
+  "name": "Pestañas de colecciones",
+  "class": "section-tab-collections",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Título",
+      "default": "INVITADA OTOÑO"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Productos por pestaña",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columnas (escritorio)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_medium",
+      "label": "Columnas (tablet)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "visible_mobile",
+      "label": "Productos visibles (móvil)",
+      "options": [
+        { "value": "1.2", "label": "1 y un poco del siguiente" },
+        { "value": "1.6", "label": "1 y medio" },
+        { "value": "2", "label": "2" },
+        { "value": "2.3", "label": "2 y un poco del siguiente" }
+      ],
+      "default": "1.6"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado superior",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado inferior",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Pestaña",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título de la pestaña",
+          "info": "Si se deja vacío, usa el nombre de la colección."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Texto del botón inferior"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pestañas de colecciones",
+      "blocks": [
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}

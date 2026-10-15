@@ -1,0 +1,259 @@
+<footer
+  class="site-footer section-padding"
+  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px; --item-count: {{ section.blocks.size | at_least: 1 }}; --footer-logo-width: {{ section.settings.logo_width }}px;{% if section.settings.show_border %} --footer-border: var(--COLOR-BORDER-HAIRLINE);{% endif %}{% if section.settings.color_bg != blank %} background: {{ section.settings.color_bg }};{% endif %}"
+>
+  <div class="wrapper--full-padded">
+    <div class="footer__top">
+      <div class="footer__logo-wrapper">
+        <a href="{{ routes.root_url }}" class="footer__logo" aria-label="{{ shop.name }}">
+          {%- if section.settings.logo != blank -%}
+            {{ section.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: shop.name, widths: '100, 200, 300, 400', sizes: '100px' }}
+          {%- else -%}
+            <span class="header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+
+      <div class="footer__blocks">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              <details class="footer__block" open {{ block.shopify_attributes }}>
+                <summary class="footer__block-title heading-x-small">
+                  {{ block.settings.title | default: block.settings.menu.title | escape }}
+                  {%- render 'icon', icon: 'chevron-down' -%}
+                </summary>
+                <div class="footer__block-content">
+                  {%- if block.settings.menu != blank -%}
+                    <ul class="footer__quicklinks unstyled">
+                      {%- for link in block.settings.menu.links -%}
+                        <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </details>
+
+            {%- when 'text' -%}
+              <details class="footer__block" open {{ block.shopify_attributes }}>
+                <summary class="footer__block-title heading-x-small">
+                  {{ block.settings.title | escape }}
+                  {%- render 'icon', icon: 'chevron-down' -%}
+                </summary>
+                <div class="footer__block-content rte">
+                  {{ block.settings.text }}
+                  {%- if block.settings.show_social -%}
+                    {%- render 'social-icons' -%}
+                  {%- endif -%}
+                </div>
+              </details>
+
+            {%- when 'newsletter' -%}
+              <div class="footer__block footer__newsletter" {{ block.shopify_attributes }}>
+                <h3 class="footer__block-title heading-x-small">{{ block.settings.title | escape }}</h3>
+                {%- if block.settings.text != blank -%}
+                  <div class="rte">{{ block.settings.text }}</div>
+                {%- endif -%}
+                {%- form 'customer', id: 'FooterNewsletter' -%}
+                  <input type="hidden" name="contact[tags]" value="newsletter">
+                  {%- if form.posted_successfully? -%}
+                    <p class="form-message">{{ 'general.newsletter.success' | t }}</p>
+                  {%- else -%}
+                    <label class="visually-hidden" for="FooterNewsletterEmail">{{ 'general.newsletter.email' | t }}</label>
+                    <input type="email" id="FooterNewsletterEmail" name="contact[email]" placeholder="{{ 'general.newsletter.email' | t }}" required autocomplete="email">
+                    <button type="submit" class="btn btn--small">{{ 'general.newsletter.submit' | t }}</button>
+                  {%- endif -%}
+                  {%- if form.errors -%}
+                    <p class="form-message form-message--error">{{ form.errors | default_errors }}</p>
+                  {%- endif -%}
+                {%- endform -%}
+                {%- if block.settings.show_social -%}
+                  {%- render 'social-icons' -%}
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div>
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}
+        {%- if section.settings.copyright_text != blank %} · {{ section.settings.copyright_text }}{% endif -%}
+        {%- if section.settings.show_powered_by %} · {{ powered_by_link }}{% endif -%}
+      </div>
+
+      {%- if section.settings.show_country_selector and localization.available_countries.size > 1 -%}
+        <div class="footer__localization">
+          {%- form 'localization', id: 'FooterLocalization' -%}
+            <input type="hidden" name="return_to" value="{{ request.path }}">
+            <label class="visually-hidden" for="FooterCountry">{{ 'localization.country_label' | t }}</label>
+            <select id="FooterCountry" name="country_code" onchange="this.form.submit()">
+              {%- for country in localization.available_countries -%}
+                <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                  {{- country.name }} / {{ country.iso_code -}}
+                </option>
+              {%- endfor -%}
+            </select>
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <ul class="footer__payments unstyled" aria-label="{{ 'general.payment.methods' | t }}">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Ancho del logo",
+      "min": 50,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "inline_richtext",
+      "id": "copyright_text",
+      "label": "Texto adicional de copyright"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_powered_by",
+      "label": "Mostrar 'Tecnología de Shopify'",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Mostrar iconos de pago",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "Mostrar selector de región",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Mostrar línea superior",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Color de fondo"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado superior",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado inferior",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menú",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "INFO"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menú",
+          "default": "footer"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texto",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "SOBRE NOSOTRAS"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "default": "<p>Comparte información sobre tu marca.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "label": "Mostrar redes sociales",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "NEWSLETTER"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "default": "<p>Suscríbete para enterarte de los nuevos drops.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "label": "Mostrar redes sociales",
+          "default": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h1 class="heading-small">{{ 'collections.general.all_collections' | t }}</h1>
+</div>
+<div class="collection-list" style="padding-bottom: 60px;">
+  {%- for collection in collections -%}
+    {%- unless collection.handle == 'all' or collection.handle == 'frontpage' -%}
+      <a href="{{ collection.url }}" class="collection-card">
+        {%- if collection.featured_image -%}
+          {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 750px) 25vw, 50vw', alt: collection.title }}
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+        <span class="collection-card__title">{{ collection.title | escape }}</span>
+      </a>
+    {%- endunless -%}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Lista de colecciones",
+  "class": "section-main-list-collections",
+  "settings": []
+}
+{% endschema %}

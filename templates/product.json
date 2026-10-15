@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": { "type": "title", "settings": {} },
+        "price": { "type": "price", "settings": {} },
+        "variant_picker": { "type": "variant_picker", "settings": { "color_swatches": true } },
+        "inventory": { "type": "inventory", "settings": { "low_threshold": 5 } },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_quantity": false, "show_dynamic_checkout": false } },
+        "description": { "type": "collapsible", "settings": { "heading": "Descripción", "use_description": true, "open": true } },
+        "shipping": { "type": "collapsible", "settings": { "heading": "Envíos y devoluciones", "content": "<p>Envío gratuito a Portugal y España (península) en pedidos superiores a 250 €.</p>" } },
+        "share": { "type": "share", "settings": {} }
+      },
+      "block_order": ["title", "price", "variant_picker", "inventory", "buy_buttons", "description", "shipping", "share"],
+      "settings": {}
+    },
+    "related": {
+      "type": "related-products",
+      "settings": { "title": "También te puede gustar" }
+    }
+  },
+  "order": ["main", "related"]
+}

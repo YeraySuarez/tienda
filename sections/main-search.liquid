@@ -1,0 +1,53 @@
+{%- paginate search.results by 24 -%}
+  <div style="--COLUMNS: 4; --COLUMNS-MEDIUM: 3; --COLUMNS-MOBILE-GRID: 2;">
+    <div class="page-header">
+      <h1 class="heading-small">{{ 'general.search.title' | t }}</h1>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-popdown__form" style="margin-top: 20px;">
+        <input type="hidden" name="type" value="product">
+        <label class="visually-hidden" for="SearchPage">{{ 'general.search.placeholder' | t }}</label>
+        <input type="search" id="SearchPage" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}">
+        <button type="submit" class="btn">{{ 'general.search.submit' | t }}</button>
+      </form>
+      {%- if search.performed -%}
+        <p style="margin-top: 16px;">{{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <div class="product-grid">
+          {%- for item in search.results -%}
+            {%- case item.object_type -%}
+              {%- when 'product' -%}
+                {%- render 'product-card', product: item -%}
+              {%- when 'article' -%}
+                <a href="{{ item.url }}" class="product-card">
+                  <div class="product-card__media">
+                    {%- if item.image -%}{{ item.image | image_url: width: 600 | image_tag: loading: 'lazy' }}{%- endif -%}
+                  </div>
+                  <div class="product-card__info">{{ item.title | escape }}</div>
+                </a>
+              {%- when 'page' -%}
+                <a href="{{ item.url }}" class="product-card">
+                  <div class="product-card__info">{{ item.title | escape }}</div>
+                </a>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <div class="empty-state">
+          <p>{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Resultados de búsqueda",
+  "class": "section-main-search",
+  "settings": []
+}
+{% endschema %}

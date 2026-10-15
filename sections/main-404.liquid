@@ -1,0 +1,14 @@
+<div class="empty-state" style="padding: 100px 20px;">
+  <p class="subheading">404</p>
+  <h1 class="heading-small" style="margin: 10px 0;">{{ 'general.404.title' | t }}</h1>
+  <p>{{ 'general.404.subtext' | t }}</p>
+  <a href="{{ routes.all_products_collection_url }}" class="btn">{{ 'cart.general.continue_shopping' | t }}</a>
+</div>
+
+{% schema %}
+{
+  "name": "Página 404",
+  "class": "section-main-404",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,28 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_bg": "#ffffff",
+      "color_bg_accent": "#f1f1f1",
+      "color_text": "#212121",
+      "color_text_light": "#646464",
+      "color_border": "#d1cdc4",
+      "color_accent": "#938e85",
+      "btn_primary_bg": "#212121",
+      "btn_primary_text": "#ffffff",
+      "btn_secondary_bg": "#ab8c52",
+      "btn_secondary_text": "#ffffff",
+      "heading_use_system_font": true,
+      "type_heading_font": "inter_n7",
+      "type_body_font": "inter_n4",
+      "body_size": 13,
+      "nav_size": 14,
+      "heading_small_size": 20,
+      "button_radius": 300,
+      "product_card_ratio": "0.8333",
+      "cart_type": "drawer",
+      "free_shipping_threshold": 250,
+      "body_use_system_font": true
+    }
+  }
+}

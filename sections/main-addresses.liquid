@@ -1,0 +1,41 @@
+{%- paginate customer.addresses by 10 -%}
+  <div class="account account--wide">
+    <h1 class="heading-small">{{ 'customer.addresses.title' | t }}</h1>
+    <p class="text-center" style="margin-bottom: 30px;">
+      <a href="{{ routes.account_url }}" class="btn btn--text">{{ 'customer.account.return' | t }}</a>
+    </p>
+    <div class="account-grid">
+      <div>
+        {%- for address in customer.addresses -%}
+          <div style="padding: 16px 0; border-bottom: 1px solid var(--COLOR-BORDER-HAIRLINE);">
+            {%- if address == customer.default_address -%}<p><strong>{{ 'customer.addresses.default' | t }}</strong></p>{%- endif -%}
+            {{ address | format_address }}
+            <details style="margin-top: 10px;">
+              <summary style="cursor: pointer; text-decoration: underline;">{{ 'customer.addresses.edit' | t }}</summary>
+              <div style="margin-top: 14px;">
+                {%- form 'customer_address', address -%}
+                  {%- render 'address-fields', form: form, address: address, prefix: address.id -%}
+                {%- endform -%}
+              </div>
+            </details>
+            <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" style="margin-top: 8px;">
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" class="btn btn--text" onclick="return confirm('{{ 'customer.addresses.delete_confirm' | t }}');">{{ 'customer.addresses.delete' | t }}</button>
+            </form>
+          </div>
+        {%- endfor -%}
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
+      <div>
+        <h2 class="heading-x-small" style="margin-bottom: 14px;">{{ 'customer.addresses.add' | t }}</h2>
+        {%- form 'customer_address', customer.new_address -%}
+          {%- render 'address-fields', form: form, address: customer.new_address, prefix: 'new' -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{ "name": "Direcciones", "class": "section-main-addresses", "settings": [] }
+{% endschema %}
