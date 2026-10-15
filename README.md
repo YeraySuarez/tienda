@@ -25,11 +25,18 @@ shopify theme push                                   # subir a la tienda
 | Logo (normal y blanco para la cabecera transparente) | Personalizar → Cabecera |
 | Menú principal (`main-menu`), con «SHOP» y sus subcategorías como hijos | Contenido → Menús |
 | Menús del footer: `footer` (INFO) y `politicas` (POLÍTICAS) | Contenido → Menús |
-| Colecciones de la portada (`new-in`, `invitada-oton`, `dresses`, `jackets`…) | Créalas con esos handles o cámbialas en el personalizador |
+| Colecciones de la portada (`new-in`, `invitada-otono`, `vestidos`, `chaquetas`…) | Ya creadas en Nume Studio; puedes cambiarlas en el personalizador |
 | Imágenes del slideshow, logos de prensa y del carrusel de colecciones | Personalizar → cada sección |
 | Página de lista de deseos | Crea una página con handle `wishlist` y la plantilla `page.wishlist` |
 | Página de contacto | Asigna la plantilla `page.contact` |
 | Colores, tipografía, redondeo de botones, umbral de envío gratis | Personalizar → Configuración del tema |
+
+### Cómo entra cada producto en su colección (ya configurado en Nume Studio)
+Las colecciones son automáticas, no hay que añadir los productos a mano:
+- **New in**: productos con el tag `new-in`.
+- **Invitada otoño**: productos con el tag `invitada`.
+- **Los más vendidos**: todos los productos, ordenados por ventas.
+- **Categorías**: según el **tipo de producto**: `Vestidos`, `Conjuntos`, `Pantalones`, `Blazers`, `Tops`, `Blusas`, `Faldas`, `Chaquetas`, `Accesorios`, `Jerséis`, `Cárdigans` o `Chalecos`.
 
 ### Etiquetas de los productos
 - **Pre-order**: añade el tag `pre-order` al producto (o el metacampo booleano `custom.preorder`). Muestra la etiqueta y cambia el botón a «Pre-order».

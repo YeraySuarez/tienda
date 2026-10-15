@@ -10,7 +10,7 @@
             "title_size": "heading-small",
             "text": "<p>Disponible ahora</p>",
             "button_label": "SHOP",
-            "link": "shopify://collections/all",
+            "link": "shopify://collections/new-in",
             "button_style": "btn--white",
             "text_position": "middle-center",
             "text_color": "#ffffff",
@@ -25,7 +25,7 @@
             "title_size": "heading-small",
             "text": "<p>Disponible ahora</p>",
             "button_label": "SHOP",
-            "link": "shopify://collections/all",
+            "link": "shopify://collections/invitada-otono",
             "button_style": "btn--white",
             "text_position": "middle-center",
             "text_color": "#ffffff",
@@ -72,7 +72,7 @@
         "tab_1": {
           "type": "collection",
           "settings": {
-            "collection": "invitada-oton"
+            "collection": "invitada-otono"
           }
         }
       },
@@ -178,56 +178,56 @@
         "c1": {
           "type": "collection",
           "settings": {
-            "collection": "dresses",
+            "collection": "vestidos",
             "label": "VESTIDOS"
           }
         },
         "c2": {
           "type": "collection",
           "settings": {
-            "collection": "sets-total-look",
+            "collection": "conjuntos-total-look",
             "label": "CONJUNTOS | TOTAL LOOK"
           }
         },
         "c3": {
           "type": "collection",
           "settings": {
-            "collection": "tops-t-shirts",
+            "collection": "tops-camisetas",
             "label": "TOPS | CAMISETAS"
           }
         },
         "c4": {
           "type": "collection",
           "settings": {
-            "collection": "blouse-shirt",
+            "collection": "blusas-camisas",
             "label": "BLUSAS | CAMISAS"
           }
         },
         "c5": {
           "type": "collection",
           "settings": {
-            "collection": "trousers",
+            "collection": "pantalones",
             "label": "PANTALONES"
           }
         },
         "c6": {
           "type": "collection",
           "settings": {
-            "collection": "skirts",
+            "collection": "faldas",
             "label": "FALDAS"
           }
         },
         "c7": {
           "type": "collection",
           "settings": {
-            "collection": "jackets",
+            "collection": "chaquetas",
             "label": "CHAQUETAS"
           }
         },
         "c8": {
           "type": "collection",
           "settings": {
-            "collection": "sweaters",
+            "collection": "jerseis",
             "label": "JERSÉIS"
           }
         },
